@@ -15,7 +15,7 @@ class Quizzler extends StatelessWidget {
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.all(10.0),
             child: QuizPage(),
           ),
         ),
@@ -36,12 +36,7 @@ class _QuizPageState extends State<QuizPage> {
     bool correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
-      //On the next line, you can also use if (quizBrain.isFinished()) {}, it does the same thing.
       if (quizBrain.isFinished() == true) {
-        //This is the code for the basic alert from the docs for rFlutter Alert:
-        //Alert(context: context, title: "RFLUTTER", desc: "Flutter is awesome.").show();
-
-        //Modified for our purposes:
         Alert(
           context: context,
           title: 'Finished!',
