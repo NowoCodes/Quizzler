@@ -10,6 +10,7 @@ class Quizzler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
@@ -37,7 +38,6 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       //On the next line, you can also use if (quizBrain.isFinished()) {}, it does the same thing.
       if (quizBrain.isFinished() == true) {
-
         //This is the code for the basic alert from the docs for rFlutter Alert:
         //Alert(context: context, title: "RFLUTTER", desc: "Flutter is awesome.").show();
 
@@ -51,9 +51,7 @@ class _QuizPageState extends State<QuizPage> {
         quizBrain.reset();
 
         scoreKeeper = [];
-      }
-
-      else {
+      } else {
         if (userPickedAnswer == correctAnswer) {
           scoreKeeper.add(Icon(
             Icons.check,
@@ -76,71 +74,55 @@ class _QuizPageState extends State<QuizPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Expanded(
-          flex: 5,
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: Text(
-                quizBrain.getQuestionText(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
-              child: Text(
-                'True',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
-              onPressed: () {
-                //The user picked true.
-                checkAnswer(true);
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                //The user picked false.
-                checkAnswer(false);
-              },
-            ),
-          ),
-        ),
+        _queMethod(),
+        _btnMethod('True', Colors.green, () {
+          checkAnswer(true);
+        }),
+        _btnMethod('False', Colors.red, () {
+          checkAnswer(false);
+        }),
         Row(
           children: scoreKeeper,
         )
       ],
     );
   }
-}
 
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
+  Expanded _queMethod() {
+    return Expanded(
+        flex: 5,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Center(
+            child: Text(
+              quizBrain.getQuestionText(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 25.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+  }
+
+  Expanded _btnMethod(String answer, Color color, Function onPressed) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(15.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 9.0,
+            primary: color,
+            textStyle: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          child: Text(answer),
+          onPressed: onPressed,
+        ),
+      ),
+    );
+  }
+}
